@@ -16,7 +16,7 @@ import com.weatherforecast.api.JsonReader;
 
 public class JunitTests {
 	final Logger logger = LoggerFactory.getLogger(WeatherForecast_StepDefinitions.class);
-	
+	private JSONObject jsonObject;
 	@Test
 	public void test() throws IOException, JSONException{
 		String weather_url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Sydney,AU&cnt=10&APPID=e7239e48c6a7afc50bd9fb2d2adae44b";
@@ -30,22 +30,26 @@ public class JunitTests {
 		String sydney = json_response.getJSONObject("city").getString("name");
 		System.out.println(sydney);
 		
+		logger.info("Response = " + json_response.toString());
+
 		JSONArray listArray = json_response.getJSONArray("list");
 		for (int i = 0; i < listArray.length(); i++) {
-		    JSONObject jsonObject = listArray.getJSONObject(i);
+		    JSONObject  jsonObject = listArray.getJSONObject(i);
 		    String jsonObjectDT = jsonObject.getString("dt");
-		    
 		    long batch_date = Long.parseLong(jsonObjectDT); 
 		    Date dt = new Date (batch_date * 1000); 
-		    //SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy");
-		    //String actualDate = sfd.format(dt);
-		    
 		    Calendar cal = Calendar.getInstance();
 		    cal.setTime(dt);
-			//int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 			String dayOfWeek= new SimpleDateFormat("EE").format(dt);
-			System.out.println(dayOfWeek);
+			if (dayOfWeek.equals("Thu")){
+				this.jsonObject = jsonObject;
+				break;
+			}
 		}
+		
+		JSONArray weatherJSONArray = jsonObject.getJSONArray("weather");
+		weatherJSONArray.getJSONObject(0).getString("main");
+		weatherJSONArray.getJSONObject(0).getString("description");
 			
 		}
 		

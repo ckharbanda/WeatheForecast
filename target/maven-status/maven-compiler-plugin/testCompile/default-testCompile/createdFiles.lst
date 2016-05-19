@@ -1,1 +1,4 @@
 com\weatherforecast\tests\RunCukesTest.class
+com\weatherforecast\tests\Common.class
+com\weatherforecast\tests\JunitTests.class
+com\weatherforecast\tests\WeatherForecast_StepDefinitions.class
